@@ -17,18 +17,10 @@ def iter_files(root_dir):
             yield abs_p, rel_p
 
 def score_file(rel_path, query, abs_path, content_sample_bytes=1_000_000):
-    """
-    Score how well a file matches `query`.
-    - Filename/relpath fuzzy similarity (difflib ratio)
-    - Bonus if query is a substring of the name/path
-    - Small bonus if query appears in the (first ~1MB) of file text
-    Scores are heuristic and comparable only within a run.
-    """
     q = query.lower()
     name = os.path.basename(rel_path).lower()
     rel = rel_path.lower()
 
-    # Fuzzy similarity primarily on filename, lightly on relpath
     name_sim = difflib.SequenceMatcher(None, name, q).ratio()
     rel_sim  = difflib.SequenceMatcher(None, rel,  q).ratio()
 
